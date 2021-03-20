@@ -14,7 +14,6 @@ public class Player : Actor
     public bool Grounded => walkableDetector.IsDetected;
     public bool Invincible { get; set; }
 
-
     private void Update()
     {
         animator.SetFloat("ForwardSpeed", Mathf.Abs(rigidbody.velocity.x));
@@ -41,8 +40,9 @@ public class Player : Actor
 
     public void Stop()
     {
-        MoveForward(0.0f, 0.0f);
+        rigidbody.velocity = Vector2.zero;
     }
+
 
     public void Jump(float speed)
     {

@@ -5,12 +5,10 @@ using UnityEngine;
 public class PlayerMovement : StateController
 {
     private Player player;
-    private new Collider2D collider;
 
     private void Awake()
     {
         player = GetComponentInParent<Player>();
-        collider = player.GetComponent<Collider2D>();
     }
 
     private void Update()
