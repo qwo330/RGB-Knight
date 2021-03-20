@@ -23,7 +23,11 @@ public class PlayerJump : StateController
     private void OnEnable()
     {
         player.Jump(jumpSpeed);
-        if (canJump) animator.SetTrigger("Jump");
+        if (canJump)
+        {
+            animator.SetTrigger("Jump");
+            animator.SetBool("Jumping", true);
+        }
     }
 
     private void Update()
@@ -38,6 +42,7 @@ public class PlayerJump : StateController
         else if (rigidbody.velocity.y <= 0.0f && player.Grounded)
         {
             canJump = true;
+            animator.SetBool("Jumping", false);
             InvokeTransition(typeof(PlayerMovement));
         }
     }

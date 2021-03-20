@@ -79,6 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 30
   duration: 0.1
+  evasionTime: 0.05
 --- !u!1 &1069569361
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,6 +481,7 @@ MonoBehaviour:
   - {fileID: 1147307169}
   - {fileID: 1069569363}
   - {fileID: 743029173}
+  - {fileID: 6121057732914232136}
 --- !u!114 &38484689
 MonoBehaviour:
   m_ObjectHideFlags: 0

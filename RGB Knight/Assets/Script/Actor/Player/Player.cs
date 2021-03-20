@@ -39,6 +39,11 @@ public class Player : Actor
             renderer.flipX = false;
     }
 
+    public void Stop()
+    {
+        MoveForward(0.0f, 0.0f);
+    }
+
     public void Jump(float speed)
     {
         var velocity = rigidbody.velocity;
