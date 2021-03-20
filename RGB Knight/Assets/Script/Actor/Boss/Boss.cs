@@ -25,7 +25,7 @@ public class Boss : Monster
 
     //public UnityAction
 
-    void Start()
+    void Awake()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Actor>();
         _animator = GetComponentInChildren<Animator>();
@@ -48,12 +48,12 @@ public class Boss : Monster
         _currentPhase.Action();
     }
 
-    public override void Move()
-    {
-        Trace();
-    }
+    //public override void Move()
+    //{
+    //    Trace();
+    //}
 
-    public override void Attcked()
+    public override void Attacked()
     {
         _HP -= 1;
 
@@ -192,7 +192,10 @@ public class BossPhase01 : BossPhase
 
     public override void Action()
     {
-        if (_boss.GetNextAttackTime() >= Time.time)
+        if (_boss.IsPlayerInSight() == false)
+            return;
+
+        if (_boss.GetNextAttackTime() < Time.time)
         {
             /*if (combo == 4)
             {
@@ -209,7 +212,7 @@ public class BossPhase01 : BossPhase
             {
                 combo++;
 
-                if (_boss.IsPlayerInAttackRange())
+                if (true)//_boss.IsPlayerInAttackRange())
                 {
                     Pattern1();
                 }
@@ -218,6 +221,10 @@ public class BossPhase01 : BossPhase
                     Pattern2();
                 }
             }
+        }
+        else
+        {
+            _boss.Trace();
         }
     }
 
@@ -260,7 +267,10 @@ public class BossPhase02 : BossPhase
 
     public override void Action()
     {
-        if (_boss.GetNextAttackTime() >= Time.time)
+        if (_boss.IsPlayerInSight() == false)
+            return;
+
+        if (_boss.GetNextAttackTime() < Time.time)
         {
             /*if (combo == 4)
             {
@@ -326,7 +336,7 @@ public class BossPhase03 : BossPhase
 
     public override void Action()
     {
-        if (_boss.GetNextAttackTime() >= Time.time)
+        if (_boss.GetNextAttackTime() < Time.time)
         {
             if (combo == 4)
             {

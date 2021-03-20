@@ -38,7 +38,7 @@ public class Monster : Actor
 
     protected bool _isParring = false;
 
-    void Start()
+    void Awake()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Actor>();
         _animator = GetComponentInChildren<Animator>();
@@ -141,7 +141,7 @@ public class Monster : Actor
         int layerMask = 1 << LayerMask.NameToLayer("Map");
 
         // 바닥 판정
-        RaycastHit2D hit = Physics2D.Raycast(frontPoint, Vector3.down, 1f, layerMask);
+        RaycastHit2D hit = Physics2D.Raycast(frontPoint, Vector3.down, 2f, layerMask);
         if (hit != null)
         {
             if (hit.collider == null)
@@ -151,7 +151,7 @@ public class Monster : Actor
         }
 
         // 벽 판정
-        hit = Physics2D.Raycast(transform.position, _lookDIr, 0.4f, layerMask);
+        hit = Physics2D.Raycast(transform.position, _lookDIr, 1f, layerMask);
         if (hit != null)
         {
             var col = hit.collider;
@@ -187,6 +187,11 @@ public class Monster : Actor
     public bool IsPlayerInAttackRange()
     {
         // todo : 연산량이 많음
+        if (_player == null)
+        {
+            //return false;
+            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Actor>();
+        }
         float distance = Vector2.Distance(transform.position, _player.transform.position);
         return distance < _AttackRange;
     }
@@ -194,6 +199,12 @@ public class Monster : Actor
     public bool IsPlayerInSight()
     {
         // todo : 연산량이 많음
+        if (_player == null)
+        {
+            //return null;
+            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Actor>();
+        }
+
         float distance = Vector2.Distance(transform.position, _player.transform.position);
         return distance < _SightRange;
     }
@@ -267,8 +278,8 @@ public class Monster : Actor
         Vector3 pos = transform.position;
 
         // 레이캐스트
-        Vector3 frontPoint = transform.position + _lookDIr;
-        Vector3 groundPoint = frontPoint + Vector3.down;
+        Vector3 frontPoint = transform.position + _lookDIr * 1;
+        Vector3 groundPoint = frontPoint + Vector3.down * 2;
 
         Gizmos.DrawLine(pos, frontPoint);
 
