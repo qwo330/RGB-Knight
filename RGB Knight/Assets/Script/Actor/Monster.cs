@@ -2,21 +2,276 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EEnemyState
+{
+    Idle,
+    Roam,
+    Trace,
+    Attck,
+    Dead,
+    Max,
+}
+
 public class Monster : Actor
 {
-    public override void Move()
+    public float _SightRange = 1f;
+    public float _AttackRange = 1f;
+
+    public float _AttackTerm = 5f;
+    protected float _power = 1f;
+    EEnemyState _eEnemyState;
+
+    //[SerializeField] float _RoamingRange = 5f;
+    [SerializeField] bool ShowGizmo = true;
+
+    protected Vector3 _lookDIr;
+    protected Vector3 _leftScale = new Vector3(-1, 1, 1);
+    protected Vector2 _rightScale = new Vector3(1, 1, 1);
+
+    //float _leftValue, _rightValue;
+
+    protected Animator _animator;
+    protected Actor _player;
+    
+    void Start()
     {
-        //base.Move();
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Actor>();
+        _animator = GetComponentInChildren<Animator>();
+        Init();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void Init()
     {
-        Debug.Log("mon trigger enter");
+        _HP = _MaxHP;
+        ChangeState(EEnemyState.Roam);
+
+        //float tx = transform.position.x;
+        //_leftValue = tx - _RoamingRange;
+        //_rightValue = tx + _RoamingRange;
+
+        _lookDIr = Vector2.left;
     }
+
+    void Update()
+    {
+        if (_eEnemyState == EEnemyState.Roam)
+        {
+            if (IsPlayerInSight())
+            {
+                ChangeState(EEnemyState.Trace);
+            }
+            else
+            {
+                if (IsMoveable() == false)
+                {
+                    ChangeLookDir();
+                }
+
+                Move();
+            }
+        }
+
+        else if (_eEnemyState == EEnemyState.Trace)
+        {
+            if (IsPlayerInAttackRange())
+            {
+                ChangeState(EEnemyState.Attck);
+            }
+            else if (IsPlayerInSight() == false)
+            {
+                ChangeState(EEnemyState.Roam);
+            }
+            else
+            {
+                Trace();
+            }
+        }
+
+        else if (_eEnemyState == EEnemyState.Attck)
+        {
+            if (IsPlayerInAttackRange())
+            {
+                Attack();
+            }
+            else
+            {
+                ChangeState(EEnemyState.Trace);
+            }
+        }
+    }
+
+    public void ChangeState(EEnemyState nextState)
+    {
+        _eEnemyState = nextState;
+    }
+
+    public override void Move()
+    {
+        Vector3 moveVelocity = Vector3.zero;
+
+        if (_lookDIr.x > 0) // 오른쪽
+        {
+            transform.localScale = _rightScale;
+            moveVelocity = Vector3.right;
+        }
+        else // 왼쪽
+        {
+            transform.localScale = _leftScale;
+            moveVelocity = Vector3.left;
+        }
+
+        transform.position += moveVelocity * Time.deltaTime * _MoveSpeed;
+    }
+
+    void ChangeLookDir()
+    {
+        _lookDIr = _lookDIr.x > 0 ? Vector3.left : Vector3.right;
+    }
+
+    bool IsMoveable()
+    {
+        // todo : 레이캐스트를 쏴서 앞에 바닥이 있는지 & 벽이 있는지 -> 이동 가능한지 판단한다.
+        Vector3 frontPoint = transform.position + _lookDIr;
+        int layerMask = 1 << LayerMask.NameToLayer("Map");
+
+        // 바닥 판정
+        RaycastHit2D hit = Physics2D.Raycast(frontPoint, Vector3.down, 1f, layerMask);
+        if (hit != null)
+        {
+            if (hit.collider == null)
+            {
+                return false;
+            }
+        }
+
+        // 벽 판정
+        hit = Physics2D.Raycast(transform.position, _lookDIr, 0.4f, layerMask);
+        if (hit != null)
+        {
+            var col = hit.collider;
+            if (col != null)
+            {
+                // 벽 등으로 가로막혀 있을 때
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public virtual void Trace()
+    {
+        if (_player == null)
+            return;
+
+        Util.Log("trace");
+
+        // x로 방향만 판별
+        _lookDIr = _player.transform.position - transform.position;
+        _lookDIr = _lookDIr.x > 0 ? Vector3.right : Vector3.left;
+        Move();
+    }
+
+    public void Attack()
+    {
+        Util.Log("attack");
+    }
+
+    bool IsPlayerInAttackRange()
+    {
+        // todo : 연산량이 많음
+        float distance = Vector2.Distance(transform.position, _player.transform.position);
+        return distance < _AttackRange;
+    }
+
+    bool IsPlayerInSight()
+    {
+        // todo : 연산량이 많음
+        float distance = Vector2.Distance(transform.position, _player.transform.position);
+        return distance < _SightRange;
+    }
+
+    public override void Attcked()
+    {
+        _HP -= 1;
+
+        if (_HP <= 0)
+        {
+            Dead();
+        }
+
+        // todo : 피격 효과처리
+    }
+
+    public override void Dead()
+    {
+        // todo 사망 처리
+        ChangeState(EEnemyState.Dead);
+    }
+
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    Util.Log("mon trigger enter");
+    //    if (collision.CompareTag("Player"))
+    //    {
+    //        Util.Log("find player");
+    //        ChangeState(EEnemyState.Trace);
+    //    }
+    //}
+
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    Util.Log("mon trigger exit");
+    //    if (collision.CompareTag("Player"))
+    //    {
+    //        Util.Log("lost player");
+    //        ChangeState(EEnemyState.Roam);
+    //    }
+    //}
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("mon collider enter");
+        Util.Log("mon collider enter");
 
     }
+
+#if UNITY_EDITOR
+    //Vector3 centorPos = Vector3.zero;
+    //Vector3 roamingSize = Vector3.zero;
+    private void OnDrawGizmos()
+    {
+        if (ShowGizmo == false)
+            return;
+
+        Vector3 pos = transform.position;
+
+        // 레이캐스트
+        Vector3 frontPoint = transform.position + _lookDIr;
+        Vector3 groundPoint = frontPoint + Vector3.down;
+
+        Gizmos.DrawLine(pos, frontPoint);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(frontPoint, groundPoint);
+
+        // 시야
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(pos, _SightRange);
+
+        // 공격
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(pos, _AttackRange);
+
+        //// 로밍
+        //if (centorPos == Vector3.zero)
+        //{
+        //    centorPos = pos;
+        //}
+
+        //roamingSize = new Vector3(_RoamingRange * 2, 1, 0);
+
+        //Gizmos.color = Color.green;
+        //Gizmos.DrawWireCube(centorPos, roamingSize);
+    }
+#endif
 }

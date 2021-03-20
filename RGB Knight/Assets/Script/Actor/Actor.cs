@@ -9,20 +9,6 @@ public enum EColor
     Blue,
 }
 
-public enum EEnemyState
-{
-    Idle,
-    Roam,
-    Attck,
-    Dead,
-    Max,
-}
-
-public enum EPlayerState
-{
-
-}
-
 public class Actor : MonoBehaviour
 {
     public int _HP { get; set; }
@@ -60,14 +46,19 @@ public class Actor : MonoBehaviour
 
     }
 
+    public virtual void Dead()
+    {
+        
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("user trigger enter");
+        Util.Log("user trigger enter");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("user collider enter");
+        Util.Log("user collider enter");
         
     }
 }

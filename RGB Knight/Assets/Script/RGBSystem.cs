@@ -12,7 +12,7 @@ public class RGBSystem : MonoBehaviour
     void Awake()
     {
         actor = GetComponent<Actor>();
-        render = actor.GetComponent<SpriteRenderer>();
+        render = actor.GetComponentInChildren<SpriteRenderer>();
         plat = actor.GetComponent<PlatformEffector2D>();
     }
 

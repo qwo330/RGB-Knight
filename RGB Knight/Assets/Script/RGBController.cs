@@ -7,10 +7,16 @@ using UnityEngine;
 /// </summary>
 public class RGBController : MonoBehaviour
 {
+    public bool IsRandom = true;
     public EColor _EColor;
 
     void Awake()
     {
+        if (IsRandom)
+        {
+            _EColor = (EColor)Random.Range(0, 3);
+        }
+
         SetColor(_EColor);
     }
 
@@ -19,7 +25,7 @@ public class RGBController : MonoBehaviour
         _EColor = eColor;
 
         gameObject.layer = LayerMask.NameToLayer(_EColor.ToString());
-        SpriteRenderer render = GetComponent<SpriteRenderer>();
+        SpriteRenderer render = GetComponentInChildren<SpriteRenderer>();
         render.color = _EColor == EColor.Red ? Color.red
                     : _EColor == EColor.Green ? Color.green
                     : Color.blue;

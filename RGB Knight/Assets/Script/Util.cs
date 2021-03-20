@@ -1,18 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Diagnostics;
 
-public class Util : MonoBehaviour
+public static class Util
 {
-    // Start is called before the first frame update
-    void Start()
+    [Conditional("UNITY_EDITOR")]
+    public static void Log(object message)
     {
-        
+        UnityEngine.Debug.Log(message);
     }
 
-    // Update is called once per frame
-    void Update()
+    [Conditional("UNITY_EDITOR")]
+    public static void LogFormat(string format, params object[] args)
     {
-        
+        UnityEngine.Debug.LogFormat(format, args);
+    }
+
+    [Conditional("UNITY_EDITOR")]
+    public static void LogError(object message)
+    {
+        UnityEngine.Debug.LogError(message);
+    }
+
+    [Conditional("UNITY_EDITOR")]
+    public static void LogErrorFormat(string format, params object[] args)
+    {
+        UnityEngine.Debug.LogErrorFormat(format, args);
     }
 }
