@@ -6,6 +6,7 @@ public class PlayerDash : StateController
 {
     [SerializeField] private float speed;
     [SerializeField] private float duration;
+    [SerializeField] private float evasionTime;
 
     private Player player;
     private new Rigidbody2D rigidbody;
@@ -26,6 +27,8 @@ public class PlayerDash : StateController
     {
         var direction = Input.GetAxisRaw("Horizontal");
         destination = player.transform.position + Vector3.right * direction * speed * duration;
+
+        player.Invincible = true;
         timer = 0.0f;
     }
 
@@ -38,6 +41,8 @@ public class PlayerDash : StateController
     private void Update()
     {
         timer += Time.deltaTime;
+        if (timer >= evasionTime)
+            player.Invincible = false;
         if (timer >= duration)
             InvokeTransition(typeof(PlayerMovement));
     }

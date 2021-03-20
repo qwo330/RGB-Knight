@@ -5,16 +5,23 @@ using UnityEngine;
 public class PlayerAttack : StateController
 {
     private Player player;
+    private Animator animator;
 
     private void Awake()
     {
         player = GetComponentInParent<Player>();
+        animator = player.GetComponent<Animator>();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-        }
+        animator.ResetTrigger("Attack");
+        animator.SetTrigger("Attack");
+    }
+
+    public void OnHit(GameObject target)
+    {
+        var enemy = target.GetComponentInParent<Monster>();
+        enemy.Attacked();
     }
 }
