@@ -36,7 +36,12 @@ public class Actor : MonoBehaviour
         }
     }
 
-    public virtual void Attcked()
+    public virtual void Attacked()
+    {
+
+    }
+
+    public virtual void Parried()
     {
 
     }

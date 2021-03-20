@@ -19,5 +19,9 @@ public class PlayerMovement : StateController
             InvokeTransition(typeof(PlayerJump));
         if (Input.GetButtonDown("Dash"))
             InvokeTransition(typeof(PlayerDash));
+        if (Input.GetMouseButtonDown(0))
+            InvokeTransition(typeof(PlayerAttack));
+        //if (Input.GetMouseButtonDown(1))
+        //    InvokeTransition(typeof(PlayerColorSelect));
     }
 }

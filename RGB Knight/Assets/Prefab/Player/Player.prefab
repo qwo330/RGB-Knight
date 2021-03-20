@@ -166,108 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0d836be24d285e4289d2cc9933ea2a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1382724931
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1382724932}
-  - component: {fileID: 1382724933}
-  m_Layer: 0
-  m_Name: Parrying Sensor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1382724932
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1382724931}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5171800892370110153}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1382724933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1382724931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c8562c727cce0640a48fdda0cd2d102, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  owner: {fileID: 5902073291539225644}
-  targets:
-    serializedVersion: 2
-    m_Bits: 0
-  oneshot: 1
-  onDetect:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!1 &1988069605
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1988069607}
-  - component: {fileID: 1988069606}
-  m_Layer: 0
-  m_Name: Attack Sensor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1988069607
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1988069605}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5171800892370110153}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1988069606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1988069605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c8562c727cce0640a48fdda0cd2d102, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  owner: {fileID: 5902073291539225644}
-  targets:
-    serializedVersion: 2
-    m_Bits: 0
-  oneshot: 1
-  onDetect:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &2479556063742565457
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,6 +219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2781880261600368492}
   - component: {fileID: 1680946409}
+  - component: {fileID: 5656118551095319037}
   m_Layer: 0
   m_Name: Walkable Detector
   m_TagString: Untagged
@@ -358,6 +257,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
+--- !u!114 &5656118551095319037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2972362062676098810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6347a62eb0a94941b3fdace58adde19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boundary: {fileID: 1680946409}
+  targets:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &5879323299366327731
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,10 +460,7 @@ MonoBehaviour:
   renderer: {fileID: 5879323299366327756}
   animator: {fileID: 4631524295769474426}
   rigidbody: {fileID: 5879323299366327753}
-  walkableDetector: {fileID: 1680946409}
-  walkableTargets:
-    serializedVersion: 2
-    m_Bits: 64
+  walkableDetector: {fileID: 5656118551095319037}
   damageEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -580,8 +492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e0815ecaad8a3441b6106e03264aee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackSensor: {fileID: 1988069606}
-  parryingSensor: {fileID: 1382724933}
 --- !u!1 &8775635014967441127
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,9 +519,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1988069607}
-  - {fileID: 1382724932}
+  m_Children: []
   m_Father: {fileID: 5879323299366327759}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

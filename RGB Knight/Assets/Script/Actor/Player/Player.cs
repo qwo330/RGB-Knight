@@ -8,25 +8,18 @@ public class Player : Actor
     [SerializeField] private new SpriteRenderer renderer;
     [SerializeField] private Animator animator;
     [SerializeField] private new Rigidbody2D rigidbody;
-
-    [SerializeField] private Collider2D walkableDetector;
-    [SerializeField] private LayerMask walkableTargets;
-
+    [SerializeField] private WalkableDetector walkableDetector;
     [SerializeField] private UnityEvent damageEvent;
 
-    private bool grounded;
-
-    public bool Grounded => grounded;
+    public bool Grounded => walkableDetector.IsDetected;
     public bool Invincible { get; set; }
 
 
     private void Update()
     {
-        grounded = Physics2D.IsTouchingLayers(walkableDetector, walkableTargets);
-        animator.SetBool("Grounded", grounded);
-
         animator.SetFloat("ForwardSpeed", Mathf.Abs(rigidbody.velocity.x));
         animator.SetFloat("VerticalSpeed", rigidbody.velocity.y);
+        animator.SetBool("Grounded", walkableDetector.IsDetected);
     }
 
     public void MoveForward(float direction)
@@ -52,6 +45,7 @@ public class Player : Actor
         velocity.y = speed;
         rigidbody.velocity = velocity;
     }
+
 
     public override void Attacked()
     {

@@ -191,7 +191,7 @@ public class Monster : Actor
         return distance < _SightRange;
     }
 
-    public override void Attcked()
+    public override void Attacked()
     {
         _HP -= 1;
 
