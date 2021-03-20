@@ -16,11 +16,6 @@ public class Actor : MonoBehaviour
     public EColor _EColor { get; set; }
     public float _MoveSpeed = 1.0f;
 
-    void Update()
-    {
-        Move();
-    }
-
     public virtual void Move()
     {
         if (Input.GetKey(KeyCode.A))
