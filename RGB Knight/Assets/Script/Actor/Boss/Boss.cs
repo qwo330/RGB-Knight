@@ -192,39 +192,76 @@ public class BossPhase01 : BossPhase
 
     public override void Action()
     {
-        if (_boss.IsPlayerInSight() == false)
-            return;
-
-        if (_boss.GetNextAttackTime() < Time.time)
+        if (_boss._HP < _boss._MaxHP * 0.67f)
         {
-            /*if (combo == 4)
-            {
-                Pattern4();
-                combo = 0;
-            }
-            else*/ if (_boss._HP < _boss._MaxHP * 0.67f)
-            {
-                Pattern3();
-                _boss.ChangeState(EBossState.Phase2);
-                _boss.ChangePhase();
-            }
-            else
-            {
-                combo++;
+            Pattern3();
+            _boss.ChangeState(EBossState.Phase2);
+            _boss.ChangePhase();
+            return;
+        }
 
-                if (true)//_boss.IsPlayerInAttackRange())
-                {
-                    Pattern1();
-                }
-                else
-                {
-                    Pattern2();
-                }
+        if (_boss.IsPlayerInSight() == false)
+        {
+            if (_boss.IsMoveable() == false)
+            {
+                _boss.ChangeLookDir();
             }
+
+            _boss.Move();
         }
         else
         {
-            _boss.Trace();
+            if (_boss.IsPlayerInAttackRange())
+            {
+                if (_boss.GetNextAttackTime() < Time.time)
+                {
+                    combo++;
+
+                    //if (_boss.IsPlayerInAttackRange())
+                    {
+                        Pattern1();
+                    }
+                }
+                else
+                {
+                    // todo : nothing
+                }
+            }
+            else
+            {
+                _boss.Trace();
+            }
+
+            //if (_boss.GetNextAttackTime() < Time.time)
+            //{
+            //    /*if (combo == 4)
+            //    {
+            //        Pattern4();
+            //        combo = 0;
+            //    }
+            //    else*/
+            //    if (_boss._HP < _boss._MaxHP * 0.67f)
+            //    {
+            //        Pattern3();
+            //        _boss.ChangeState(EBossState.Phase2);
+            //        _boss.ChangePhase();
+            //    }
+            //    else
+            //    {
+            //        combo++;
+
+            //        if (_boss.IsPlayerInAttackRange())
+            //        {
+            //            Pattern1();
+            //        }
+            //        else
+            //        {
+            //            //Pattern2();
+            //        }
+            //    }
+            //}
+            //else
+            //    _boss.Trace();
         }
     }
 

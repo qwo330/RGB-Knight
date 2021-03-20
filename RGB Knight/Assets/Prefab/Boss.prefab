@@ -223,9 +223,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _MaxHP: 5
   _MoveSpeed: 1
-  _SightRange: 1
-  _AttackRange: 1
+  _SightRange: 10
+  _AttackRange: 4.61
   _power: 1
+  _WallRay: 2
+  _GroundRay: 3
   ShowGizmo: 1
 --- !u!114 &8392473456801275968
 MonoBehaviour:

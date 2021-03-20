@@ -17,9 +17,13 @@ public class Monster : Actor
     public float _SightRange = 1f;
     public float _AttackRange = 1f;
 
+    [SerializeField]
     protected float _AttackTerm = 5f;
     protected float _nextAttackTime;
     public float _power = 1f;
+
+    public float _WallRay = 1f;
+    public float _GroundRay = 2f;
 
     EMonsterState _eEnemyState;
 
@@ -97,7 +101,14 @@ public class Monster : Actor
         {
             if (IsPlayerInAttackRange())
             {
-                Attack();
+                if (_nextAttackTime < Time.time)
+                {
+                    Attack();
+                }
+                else
+                {
+                    // todo : idle
+                }
             }
             else
             {
@@ -129,19 +140,19 @@ public class Monster : Actor
         transform.position += moveVelocity * Time.deltaTime * _MoveSpeed;
     }
 
-    void ChangeLookDir()
+    public void ChangeLookDir()
     {
         _lookDIr = _lookDIr.x > 0 ? Vector3.left : Vector3.right;
     }
 
-    bool IsMoveable()
+    public bool IsMoveable()
     {
         // todo : 레이캐스트를 쏴서 앞에 바닥이 있는지 & 벽이 있는지 -> 이동 가능한지 판단한다.
         Vector3 frontPoint = transform.position + _lookDIr;
         int layerMask = 1 << LayerMask.NameToLayer("Map");
 
         // 바닥 판정
-        RaycastHit2D hit = Physics2D.Raycast(frontPoint, Vector3.down, 2f, layerMask);
+        RaycastHit2D hit = Physics2D.Raycast(frontPoint, Vector3.down, _GroundRay, layerMask);
         if (hit != null)
         {
             if (hit.collider == null)
@@ -151,7 +162,7 @@ public class Monster : Actor
         }
 
         // 벽 판정
-        hit = Physics2D.Raycast(transform.position, _lookDIr, 1f, layerMask);
+        hit = Physics2D.Raycast(transform.position, _lookDIr, _WallRay, layerMask);
         if (hit != null)
         {
             var col = hit.collider;
@@ -182,6 +193,7 @@ public class Monster : Actor
     {
         Util.Log("attack");
         _nextAttackTime = Time.time + _AttackTerm;
+        _animator.SetTrigger("Attack");
     }
 
     public bool IsPlayerInAttackRange()
@@ -278,8 +290,8 @@ public class Monster : Actor
         Vector3 pos = transform.position;
 
         // 레이캐스트
-        Vector3 frontPoint = transform.position + _lookDIr * 1;
-        Vector3 groundPoint = frontPoint + Vector3.down * 2;
+        Vector3 frontPoint = transform.position + _lookDIr * _WallRay;
+        Vector3 groundPoint = frontPoint + Vector3.down * _GroundRay;
 
         Gizmos.DrawLine(pos, frontPoint);
 
