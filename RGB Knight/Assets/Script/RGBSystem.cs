@@ -21,12 +21,9 @@ public class RGBSystem : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             mouseStart = Input.mousePosition;
+            ChangeTimeScale(0.2f);
 
             // todo : 컬러 선택 UI 표시
-        }
-        else if (Input.GetMouseButton(1))
-        {
-            ChangeTimeScale(0.2f);
         }
         else if (Input.GetMouseButtonUp(1))
         {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EEnemyState
+public enum EMonsterState
 {
     Idle,
     Roam,
@@ -17,22 +17,27 @@ public class Monster : Actor
     public float _SightRange = 1f;
     public float _AttackRange = 1f;
 
-    public float _AttackTerm = 5f;
-    protected float _power = 1f;
-    EEnemyState _eEnemyState;
+    protected float _AttackTerm = 5f;
+    protected float _nextAttackTime;
+    public float _power = 1f;
+
+    EMonsterState _eEnemyState;
 
     //[SerializeField] float _RoamingRange = 5f;
     [SerializeField] bool ShowGizmo = true;
 
-    protected Vector3 _lookDIr;
-    protected Vector3 _leftScale = new Vector3(-1, 1, 1);
-    protected Vector2 _rightScale = new Vector3(1, 1, 1);
+    Vector3 _lookDIr;
+    Vector3 _leftScale = new Vector3(-1, 1, 1);
+    Vector2 _rightScale = new Vector3(1, 1, 1);
 
     //float _leftValue, _rightValue;
 
-    protected Animator _animator;
-    protected Actor _player;
-    
+    Animator _animator;
+    Actor _player;
+    GameObject _attackCollider; // 공격용 콜라이더
+
+    protected bool _isParring = false;
+
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Actor>();
@@ -43,22 +48,23 @@ public class Monster : Actor
     public void Init()
     {
         _HP = _MaxHP;
-        ChangeState(EEnemyState.Roam);
+        ChangeState(EMonsterState.Roam);
 
         //float tx = transform.position.x;
         //_leftValue = tx - _RoamingRange;
         //_rightValue = tx + _RoamingRange;
 
         _lookDIr = Vector2.left;
+        _nextAttackTime = Time.time;
     }
 
     void Update()
     {
-        if (_eEnemyState == EEnemyState.Roam)
+        if (_eEnemyState == EMonsterState.Roam)
         {
             if (IsPlayerInSight())
             {
-                ChangeState(EEnemyState.Trace);
+                ChangeState(EMonsterState.Trace);
             }
             else
             {
@@ -71,15 +77,15 @@ public class Monster : Actor
             }
         }
 
-        else if (_eEnemyState == EEnemyState.Trace)
+        else if (_eEnemyState == EMonsterState.Trace)
         {
             if (IsPlayerInAttackRange())
             {
-                ChangeState(EEnemyState.Attck);
+                ChangeState(EMonsterState.Attck);
             }
             else if (IsPlayerInSight() == false)
             {
-                ChangeState(EEnemyState.Roam);
+                ChangeState(EMonsterState.Roam);
             }
             else
             {
@@ -87,7 +93,7 @@ public class Monster : Actor
             }
         }
 
-        else if (_eEnemyState == EEnemyState.Attck)
+        else if (_eEnemyState == EMonsterState.Attck)
         {
             if (IsPlayerInAttackRange())
             {
@@ -95,12 +101,12 @@ public class Monster : Actor
             }
             else
             {
-                ChangeState(EEnemyState.Trace);
+                ChangeState(EMonsterState.Trace);
             }
         }
     }
 
-    public void ChangeState(EEnemyState nextState)
+    public void ChangeState(EMonsterState nextState)
     {
         _eEnemyState = nextState;
     }
@@ -175,16 +181,17 @@ public class Monster : Actor
     public void Attack()
     {
         Util.Log("attack");
+        _nextAttackTime = Time.time + _AttackTerm;
     }
 
-    bool IsPlayerInAttackRange()
+    public bool IsPlayerInAttackRange()
     {
         // todo : 연산량이 많음
         float distance = Vector2.Distance(transform.position, _player.transform.position);
         return distance < _AttackRange;
     }
 
-    bool IsPlayerInSight()
+    public bool IsPlayerInSight()
     {
         // todo : 연산량이 많음
         float distance = Vector2.Distance(transform.position, _player.transform.position);
@@ -203,10 +210,24 @@ public class Monster : Actor
         // todo : 피격 효과처리
     }
 
+    public void Parrying()
+    {
+        // todo : 패링 판정처리
+        if (true)
+        {
+            Util.Log("Parring");
+            _isParring = true;
+        }
+        else
+        {
+            _isParring = false;
+        }
+    }
+
     public override void Dead()
     {
         // todo 사망 처리
-        ChangeState(EEnemyState.Dead);
+        ChangeState(EMonsterState.Dead);
     }
 
     //private void OnTriggerEnter2D(Collider2D collision)

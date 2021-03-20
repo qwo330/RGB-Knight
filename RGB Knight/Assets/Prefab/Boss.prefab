@@ -47,6 +47,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -92,7 +93,7 @@ Animator:
   m_GameObject: {fileID: 2426254885651160455}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 47f099e78356d6a42a898106acbccc40, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -146,14 +147,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8392473456801275983}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2f00bf36785b2b4083cde9957d4d2c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 502aaecdb5fac7f428668b8ed1941031, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _MaxHP: 5
-  _MoveSpeed: 5
-  _SightRange: 3
+  _MoveSpeed: 1
+  _SightRange: 1
   _AttackRange: 1
-  _AttackTerm: 5
+  _power: 1
   ShowGizmo: 1
 --- !u!114 &8392473456801275968
 MonoBehaviour:
