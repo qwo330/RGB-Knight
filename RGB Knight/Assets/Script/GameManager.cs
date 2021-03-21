@@ -9,6 +9,7 @@ public partial class GameManager : MonoBehaviour
     public static GameManager Instance { get; set; }
     public List<GameObject> Prefabs;
     public List<GameObject> CopyedList;
+    public List<GameObject> ItemList;
 
     public int Score = 0;
     public int Level = 1;
@@ -20,21 +21,43 @@ public partial class GameManager : MonoBehaviour
     {
         Instance = this;
         CopyedList = new List<GameObject>();
+        ItemList = new List<GameObject>();
         Init();
         InitUI();
     }
 
     public void Init()
     {
+        Time.timeScale = 1f;
         Score = 0;
         ResetTimer();
         CopyedList.Clear();
+        ItemList.Clear();
+
+        Transform tr = Camera.main.transform;
+        int count = tr.childCount;
+        for (int i = 0; i < count; i++)
+        {
+            GameObject go = tr.GetChild(i).gameObject;
+            ItemList.Add(go);
+        }
     }
 
+    float ClearTime;
     void Update()
     {
         CurTime = Time.time - startTime;
         ShowTime(CurTime);
+
+        if (ClearTime == 0 && ItemList.Count == 0)
+        {
+            ClearTime = Time.time + 5f;
+        }
+
+        if ( ClearTime != 0 && ClearTime < Time.time)
+        {
+            GameOver();
+        }
     }
 
     public void ResetTimer()
@@ -84,7 +107,9 @@ public partial class GameManager : MonoBehaviour
 
     public void LoadScene(/*int level*/)
     {
+
         string sceneName = "Scene" + (Level + 1);
+        if (Level >= 3) sceneName = "Scene1";
         SceneManager.LoadScene(sceneName);
     }
 

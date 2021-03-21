@@ -19,13 +19,17 @@ public class MouseInput : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
             if (hit.collider != null)
             {
-                Debug.Log(hit.collider.name);
+                //Debug.Log(hit.collider.name);
 
                 if (hit.collider.CompareTag("Respawn"))
                     return;
 
                 GameObject origin = hit.collider.gameObject;
                 Selected = CopyObject(origin);
+
+                bool remove = GameManager.Instance.ItemList.Remove(origin);
+                //Debug.Log("Remove Clear? : " + remove + GameManager.Instance.ItemList.Count);
+                Destroy(origin);
             }
         }
         else if (Input.GetMouseButton(0))
