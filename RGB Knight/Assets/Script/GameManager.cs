@@ -8,6 +8,7 @@ public partial class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; set; }
     public List<GameObject> Prefabs;
+    public List<GameObject> CopyedList;
 
     public int Score = 0;
     public int Level = 1;
@@ -15,9 +16,19 @@ public partial class GameManager : MonoBehaviour
     float startTime = 0;
     public float CurTime = 0;
 
+    private void Awake()
+    {
+        Instance = this;
+        CopyedList = new List<GameObject>();
+        Init();
+        InitUI();
+    }
+
     public void Init()
     {
         Score = 0;
+        ResetTimer();
+        CopyedList.Clear();
     }
 
     void Update()
@@ -37,16 +48,29 @@ public partial class GameManager : MonoBehaviour
         GameOver();
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        endHeight = transform.position.y;
-        ShowScore(endHeight - startHeight);
-    }
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    Debug.Log("EXIT");
+
+    //    endHeight = transform.position.y;
+    //    ShowScore(endHeight - startHeight);
+    //}
 
     float startHeight, endHeight;
-    public void ComputeHeight()
+    public float ComputeHeight()
     {
-        startHeight = transform.position.y;
+        int count = CopyedList.Count;
+        float height = 0;
+        for (int i = 0; i < count; i++)
+        {
+            GameObject go = CopyedList[i];
+            if (height < go.transform.position.y)
+            {
+                height = go.transform.position.y;
+            }
+        }
+
+        return height;
     }
 
     void GameOver()
@@ -56,6 +80,7 @@ public partial class GameManager : MonoBehaviour
         ShowPopup();
         Time.timeScale = 0f;
     }
+
 
     public void LoadScene(/*int level*/)
     {
@@ -92,14 +117,17 @@ public partial class GameManager : MonoBehaviour
         TimeText.text = string.Format("{0:N2}", time);
     }
 
-    public void ShowScore(float score)
+    public void ShowScore()
     {
-        ScoreText.text = score.ToString() + " m";
+        float height = ComputeHeight();
+        //ScoreText.text = height.ToString() + " m";
+        ScoreText.text = string.Format("{0:N2}" + " m", height);
     }
 
     public void ShowPopup()
     {
         Popup.SetActive(true);
+        ShowScore();
     }
 
     public void HidePopup()

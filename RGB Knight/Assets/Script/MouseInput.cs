@@ -54,8 +54,9 @@ public class MouseInput : MonoBehaviour
 
             targetColl.isTrigger = false;
             targetColl = null;
+
+            GameManager.Instance.CopyedList.Add(Selected);
             Selected = null;
-            
         }
     }
 
